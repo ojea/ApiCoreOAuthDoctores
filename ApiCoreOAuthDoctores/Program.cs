@@ -26,13 +26,20 @@ builder.Services.AddAzureClients(factory =>
 {
     factory.AddSecretClient
     (builder.Configuration.GetSection("KeyVault"));
+
 });
 
 SecretClient secretClient = builder.Services.BuildServiceProvider().GetService<SecretClient>();
-KeyVaultSecret secret = await secretClient.GetSecretAsync("SecretKeyOjea"); //Aqui ponemos el nombre del secret
-string secretKey = secret.Value;
 
-HelperActionServicesOAuth helper = new HelperActionServicesOAuth(builder.Configuration, secretKey);
+KeyVaultSecret secret = await secretClient.GetSecretAsync("SecretKeyOjea"); //Aqui ponemos el nombre del secret
+KeyVaultSecret audienceKey = await secretClient.GetSecretAsync("Audience");
+KeyVaultSecret issuerKey = await secretClient.GetSecretAsync("Issuer");
+
+string secretKey = secret.Value;
+string audience = audienceKey.Value;
+string issuer = issuerKey.Value;
+
+HelperActionServicesOAuth helper = new HelperActionServicesOAuth(secretKey, audience, issuer);
 
 builder.Services.AddSingleton<HelperActionServicesOAuth>(helper);
 //esta instancia del helper debemos incluirla dentro

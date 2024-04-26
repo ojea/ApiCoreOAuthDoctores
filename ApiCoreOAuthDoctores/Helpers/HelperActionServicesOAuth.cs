@@ -32,13 +32,10 @@ namespace ApiCoreOAuthEmpleados.Helpers
         //    });
         //}
 
-        public HelperActionServicesOAuth(IConfiguration configuration, string secretKey)
+        public HelperActionServicesOAuth(string secretKey, string audience, string issuer)
         {
-            this.Issuer =
-                configuration.GetValue<string>("ApiOAuth:Issuer");
-            this.Audience =
-                configuration.GetValue<string>("ApiOAuth:Audience");
-            
+            this.Issuer = issuer;
+            this.Audience = audience;
             this.SecretKey = secretKey;
         }
 
